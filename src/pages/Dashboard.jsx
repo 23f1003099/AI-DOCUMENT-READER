@@ -9,7 +9,8 @@ import {
   List,
   TrendingUp,
   Brain,
-  Lightbulb
+  Lightbulb,
+  ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../contexts/AppContext';
@@ -98,7 +99,7 @@ const Dashboard = () => {
               summarize content, and study smarter using AI-powered tools.
             </p>
             
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 mb-6">
               <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2">
                 <FileText className="w-4 h-4" />
                 <span className="text-sm">Upload PDFs/Word</span>
@@ -116,6 +117,14 @@ const Dashboard = () => {
                 <span className="text-sm">Quiz Me</span>
               </div>
             </div>
+
+            <Link
+              to="/study"
+              className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+            >
+              <span>Start Study Session</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
@@ -169,7 +178,16 @@ const Dashboard = () => {
 
       {/* AI Study Tools */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">AI Study Tools</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">AI Study Tools</h2>
+          <Link
+            to="/study"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium flex items-center space-x-1"
+          >
+            <span>Open Study Session</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {aiTools.map((tool) => {
             const Icon = tool.icon;

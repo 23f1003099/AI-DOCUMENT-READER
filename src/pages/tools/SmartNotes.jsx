@@ -28,7 +28,7 @@ const SmartNotes = () => {
 • Critical insight #3 - Applications and implications for future study
 
 ## Summary
-This document covers several important areas that are fundamental to the subject matter. The key takeaways provide a solid foundation for further exploration and study.
+This document covers several important areas that are fundamental to the Subject matter. The key takeaways provide a solid foundation for further exploration and study.
 
 ## Questions for Review
 1. What are the main principles discussed?

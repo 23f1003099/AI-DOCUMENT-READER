@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Upload, FileText, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
+import SubjectUpload from './SubjectUpload';
 
 const UploadZone = ({ className = '' }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showSubjectModal, setShowSubjectModal] = useState(false);
   const fileInputRef = useRef(null);
   const { addDocument } = useApp();
 
@@ -43,16 +45,20 @@ const UploadZone = ({ className = '' }) => {
       return validTypes.includes(file.type) && file.size <= 25 * 1024 * 1024; // 25MB limit
     });
 
-    setSelectedFiles(validFiles);
+    if (validFiles.length > 0) {
+      setSelectedFiles(validFiles);
+      setShowSubjectModal(true);
+    }
   };
 
-  const uploadFiles = () => {
-    selectedFiles.forEach(file => {
+  const handleUploadWithSubjects = (uploadData) => {
+    uploadData.files.forEach(fileData => {
       const document = {
-        name: file.name,
-        size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
-        type: file.name.split('.').pop().toLowerCase(),
+        name: fileData.file.name,
+        size: `${(fileData.file.size / 1024 / 1024).toFixed(1)} MB`,
+        type: fileData.file.name.split('.').pop().toLowerCase(),
         uploadDate: 'Just now',
+        Subjects: uploadData.Subjects
       };
       addDocument(document);
     });
@@ -75,15 +81,15 @@ const UploadZone = ({ className = '' }) => {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 backdrop-blur-sm ${
           isDragOver
-            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-            : 'border-gray-300 dark:border-gray-600 hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
+            : 'border-gray-300 dark:border-gray-600 hover:border-indigo-400 hover:bg-gray-50/50 dark:hover:bg-gray-800/50'
         }`}
       >
         <div className="flex flex-col items-center space-y-4">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
-            isDragOver ? 'bg-indigo-100 dark:bg-indigo-900' : 'bg-gray-100 dark:bg-gray-700'
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-sm ${
+            isDragOver ? 'bg-indigo-100/70 dark:bg-indigo-900/70' : 'bg-gray-100/70 dark:bg-gray-700/70'
           }`}>
             <Upload className={`w-8 h-8 ${
               isDragOver ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400'
@@ -110,66 +116,21 @@ const UploadZone = ({ className = '' }) => {
         />
       </div>
 
-      {/* Selected Files */}
-      {selectedFiles.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-            Selected Files ({selectedFiles.length})
-          </h4>
-          
-          <div className="space-y-2">
-            {selectedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-5 h-5 text-gray-400" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {(file.size / 1024 / 1024).toFixed(1)} MB
-                    </p>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeFile(index);
-                  }}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-          
-          <div className="flex space-x-3">
-            <button
-              onClick={uploadFiles}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
-              Upload Files
-            </button>
-            <button
-              onClick={() => setSelectedFiles([])}
-              className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
-              Clear All
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Try Demo Button */}
-      <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2">
-        <span></span>
+      <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 rounded-xl font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg transform hover:scale-105">
+        <span>🚀</span>
         <span>Try Demo</span>
       </button>
+
+      {/* Subject Upload Modal */}
+      <SubjectUpload
+        isOpen={showSubjectModal}
+        onClose={() => {
+          setShowSubjectModal(false);
+          setSelectedFiles([]);
+        }}
+        onUpload={handleUploadWithSubjects}
+      />
     </div>
   );
 };
