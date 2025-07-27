@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Home, Settings, User, Plus, UploadCloud } from 'lucide-react';
+import { Brain, Home, Settings, User, Plus, UploadCloud, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Navbar = () => {
   const [showUploadBox, setShowUploadBox] = useState(false);
   const uploadRef = useRef(null);
+  const { isDark, toggleTheme } = useTheme();
 
-  // Close upload box if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (uploadRef.current && !uploadRef.current.contains(event.target)) {
@@ -21,7 +22,6 @@ const Navbar = () => {
     const file = e.target.files[0];
     if (file) {
       console.log('Uploaded:', file.name);
-      // you can add logic here to send to server
     }
   };
 
@@ -44,6 +44,19 @@ const Navbar = () => {
             <Link to="/" className="p-2 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors">
               <Home className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </Link>
+
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+              title="Toggle Theme"
+            >
+              {isDark ? (
+                <Sun className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              )}
+            </button>
+
             <button className="p-2 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors">
               <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </button>

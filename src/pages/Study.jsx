@@ -114,7 +114,7 @@ const Study = () => {
   }, [selectedDocument, highlightedPage]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-700">
       <Navbar />
 
       <div className="flex pt-16 h-screen">
@@ -126,7 +126,7 @@ const Study = () => {
           setSidebarCollapsed={setSidebarCollapsed}
         />
 
-        <div className={`flex-1 flex flex-col transition-all duration-300 ${!previewCollapsed ? 'pr-96' : 'pr-20'}`}>
+        <div className={`flex-1 flex flex-col transition-all duration-300 ${!previewCollapsed ? 'pr-96' : 'pr-0'}`}>
           <div className="flex-1 overflow-y-auto p-6">
             {studyHistory.length === 0 ? (
               <EmptyState selectedDocument={selectedDocument} selectedSubject={selectedSubject} />
@@ -150,6 +150,7 @@ const Study = () => {
             selectedSubject={selectedSubject}
             getCurrentSubject={getCurrentSubject}
             aiTools={aiTools}
+             isPreviewOpen={!!selectedDocument}
           />
         </div>
 

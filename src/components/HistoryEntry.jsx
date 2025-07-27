@@ -1,9 +1,33 @@
 // /components/HistoryEntry.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Clock } from 'lucide-react';
 
-const HistoryEntry = ({ entry, handleHistoryClick }) => {
+const HistoryEntry = ({ entry }) => {
+  const navigate = useNavigate();
   const Icon = entry.tool.icon;
+
+  const handleOpenTool = () => {
+    const toolName = entry.tool.name.toLowerCase();
+
+    const pathMap = {
+      'ask ai': '/ai-tools/ask-ai',
+      'smart notes': '/ai-tools/smart-notes',
+      'quiz me': '/ai-tools/quiz-me',
+      'flashcards': '/ai-tools/flashcards',
+      'mind map': '/ai-tools/mind-map',
+      'summary': '/ai-tools/summary',
+    };
+
+    const path = pathMap[toolName];
+
+    if (path) {
+      navigate(path);
+    } else {
+      console.error('Unknown tool:', toolName);
+    }
+  };
+
   return (
     <div key={entry.id} className="mb-6 group">
       <div className="flex items-center space-x-3 mb-3">
@@ -26,7 +50,7 @@ const HistoryEntry = ({ entry, handleHistoryClick }) => {
           </div>
         </div>
         <button
-          onClick={() => handleHistoryClick(entry)}
+          onClick={handleOpenTool}
           className="opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
         >
           Open Tool
